@@ -144,6 +144,18 @@ async def delete_task(task_id: int, ctx: Context) -> dict:
 
 # --- Resources: данные для контекста (host/пользователь кладёт их в контекст, например по @) ---
 
+@mcp.resource("todo://get_info/{task_id}", mime_type="text/plain")
+def get_info(task_id: str) -> str:
+    """открывает задачу"""
+    try:
+        task = _get(f"/api/tasks/{int(task_id)}")
+    except ValueError:
+        raise TodoError("Некорректный ID задачи") from None
+
+    return (
+        f"curl {task['title']}"
+    )
+
 @mcp.resource("todo://tasks/{task_id}", mime_type="application/json")
 def task_resource(task_id: str) -> str:
     """Одна задача по id: todo://tasks/42."""
@@ -152,7 +164,6 @@ def task_resource(task_id: str) -> str:
     except ValueError:
         raise TodoError(f"id задачи должен быть целым числом, получено: {task_id!r}") from None
     return json.dumps(_get(f"/api/tasks/{number}"), ensure_ascii=False, indent=2)
-
 
 # --- Prompts: готовые сценарии, которые вызывает пользователь (в клиентах это slash-команда) ---
 

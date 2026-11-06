@@ -3,9 +3,9 @@
   "modelProviders": {
     "openai": [
       {
-        "id": "<model_name>",
-        "name": "<model_name>",
-        "baseUrl": "<model_url>",
+        "id": "agentic/gc_v3",
+        "name": "agentic/gc_v3",
+        "baseUrl": "https://llmhub.sberai-rnd.ru/v1/",
         "envKey": "MODEL_API_KEY",
         "generationConfig": {
           "samplingParams": {
@@ -23,8 +23,18 @@
     }
   },
   "model": {
-    "name": "<model_name>",
-    "baseUrl": "<model_url>"
+    "name": "agentic/gc_v3",
+    "baseUrl": "https://llmhub.sberai-rnd.ru/v1/"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^run_shell_command$",
+        "hooks": [
+          { "type": "command", "command": "python C:/C/lab/aidd_04/practice/agent/.qwen/hooks/guard.py", "timeout": 10 }
+        ]
+      }
+    ]
   },
   "context": {
     "fileName": ["QWEN.md"]
@@ -35,13 +45,19 @@
   },
     "mcpServers": {
     "todo": {
-      "command": "/env/path/to/python",
-      "args": ["/path/to/mcp/server.py"],
-      "env": { "TODO_API_URL": "http://127.0.0.1:<app_port>" }
+      "command": "C:/Users/anast/miniconda3/envs/aidd-mcp/python.exe",
+      "args": ["C:/C/lab/aidd_04/practice/mcp/server.py"],
+      "env": { "TODO_API_URL": "http://127.0.0.1:5000" }
     },
     "excel": {
       "command": "uvx",
       "args": ["excel-mcp-server", "stdio"]
     }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__excel__format_range",
+      "Read(C:\\C\\lab\\aidd_04/**)"
+    ]
   }
 }
